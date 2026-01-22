@@ -1,0 +1,20 @@
+const practiceWords = [
+    { word: "你好", jp: "nei5 hou2", en: "Hello" },
+    { word: "多謝", jp: "do1 ze6", en: "Thank you (gift)" },
+    { word: "早晨", jp: "zou2 san4", en: "Good morning" },
+    { word: "唔該", jp: "m4 goi1", en: "Please / Thank you" },
+    { word: "香港", jp: "hoeng1 gong2", en: "Hong Kong" },
+    { word: "快樂", jp: "faai3 lok6", en: "Happy" },
+    { word: "學習", jp: "hok6 zaap6", en: "Learn" },
+    { word: "朋友", jp: "pang4 jau5", en: "Friend" },
+    { word: "食飯", jp: "sik6 faan6", en: "Eat meal" },
+    { word: "再見", jp: "zoi3 gin3", en: "Goodbye" },
+    { word: "天氣", jp: "tin1 hei3", en: "Weather" },
+    { word: "喜歡", jp: "hei2 fun1", en: "Like" },
+    { word: "學校", jp: "hok6 haau6", en: "School" },
+    { word: "老師", jp: "lou5 si1", en: "Teacher" },
+    { word: "同學", jp: "tung4 hok6", en: "Classmate" },
+    { word: "巴士", jp: "baa1 si2", en: "Bus" },
+    { word: "地鐵", jp: "dei6 tit3", en: "MTR / Subway" },
+    { word: "開心", jp: "hoi1 sam1", en: "Happy / Cheerful" }
+];

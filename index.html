@@ -4,391 +4,591 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quackable!</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+HK:wght@400;500;700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+HK:wght@300;400;500;700&family=Zen+Maru+Gothic:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #4F46E5;
-            --primary-hover: #4338ca;
-            --bg: #F3F4F6;
+            --primary: #D4A373; /* Warm Sand */
+            --primary-hover: #C59262;
+            --bg: #FAFAF9; /* Off-white/Cream */
             --card-bg: #FFFFFF;
-            --text-main: #1F2937;
-            --text-sec: #6B7280;
-            --accent: #10B981;
-            --danger: #EF4444;
+            --text-main: #4A4A4A; /* Soft Black */
+            --text-sec: #8D8D8D;
+            --accent: #A5A58D; /* Sage Green */
+            --danger: #E6B8A2; /* Soft Red/Pink */
+            --border: #E5E5E5;
         }
 
         body {
-            font-family: 'Nunito', 'Noto Sans HK', sans-serif;
+            font-family: 'Zen Maru Gothic', 'Noto Sans HK', sans-serif;
             background-color: var(--bg);
             color: var(--text-main);
             margin: 0;
-            padding: 20px;
+            padding: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
+            overflow-x: hidden; /* No scrolling needed horizontal */
         }
 
         .container {
             background: var(--card-bg);
             width: 100%;
-            max-width: 900px;
+            max-width: 1000px;
+            margin: 20px;
             border-radius: 20px;
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
-            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            padding: 40px;
             box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
         }
 
         header {
-            text-align: center;
-            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 20px;
         }
 
-        h1 {
-            font-size: 2rem;
+        .header-left h1 {
+            font-size: 1.8rem;
             margin: 0;
-            color: var(--primary);
-            font-weight: 800;
+            color: var(--text-main);
+            font-weight: 700;
+            letter-spacing: 0.05em;
         }
 
-        .subtitle {
+        .header-left .subtitle {
             color: var(--text-sec);
-            font-size: 1.1rem;
+            font-size: 0.9rem;
             margin-top: 5px;
+            font-weight: 300;
+        }
+
+        .header-right .logo {
+            height: 40px;
+            cursor: pointer;
+        }
+
+        .header-right .about-btn {
+            background: none;
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 5px 15px;
+            cursor: pointer;
+            color: var(--text-sec);
+            font-family: inherit;
+            transition: all 0.2s;
+        }
+        .header-right .about-btn:hover {
+            color: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 30px;
+        }
+        
+        @media (max-width: 768px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Left Column: Controls & Challenge */
+        .left-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
         }
 
         .word-card {
-            background: linear-gradient(135deg, #EEF2FF 0%, #E0E7FF 100%);
+            background: #FFF;
+            border: 1px solid var(--border);
             border-radius: 16px;
             padding: 30px;
             text-align: center;
-            margin-bottom: 30px;
             position: relative;
-            border: 2px solid #C7D2FE;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.02);
         }
 
         .refresh-btn {
             position: absolute;
             top: 15px;
             right: 15px;
-            background: rgba(255,255,255,0.8);
+            background: none;
             border: none;
-            border-radius: 50%;
-            width: 36px;
-            height: 36px;
+            color: var(--text-sec);
             cursor: pointer;
-            color: var(--primary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s;
             font-size: 18px;
+            transition: transform 0.3s;
         }
-        
         .refresh-btn:hover {
             transform: rotate(180deg);
-            background: white;
+            color: var(--primary);
         }
 
         .target-word {
-            font-size: 4rem;
-            font-weight: 700;
-            margin: 0;
-            line-height: 1.2;
+            font-size: 3.5rem;
+            font-weight: 500;
+            margin: 10px 0;
             color: var(--text-main);
         }
 
         .jyutping {
-            font-size: 1.5rem;
+            font-size: 1.2rem;
             color: var(--primary);
-            font-weight: 600;
-            margin-top: 10px;
-            font-family: 'Nunito', monospace;
+            font-weight: 400;
+            font-family: 'Zen Maru Gothic', monospace;
         }
 
         .meaning {
             color: var(--text-sec);
             margin-top: 5px;
-            font-size: 1rem;
-        }
-
-        .instructions {
-            text-align: center;
-            margin-bottom: 30px;
-            color: var(--text-sec);
-            background: #F9FAFB;
-            padding: 15px;
-            border-radius: 12px;
-            display: inline-block;
-            width: 100%;
-            box-sizing: border-box;
-        }
-
-        .instruction-step {
-            display: inline-block;
-            margin: 0 10px;
-            font-weight: 500;
+            font-size: 0.9rem;
+            font-weight: 300;
         }
 
         .controls {
             display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-bottom: 30px;
+            flex-direction: column;
+            gap: 10px;
         }
 
         .btn-main {
-            background: var(--primary);
+            background: var(--text-main);
             color: white;
             border: none;
-            padding: 16px 32px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            border-radius: 50px;
+            padding: 15px 20px;
+            font-size: 1rem;
+            font-weight: 500;
+            border-radius: 12px;
             cursor: pointer;
             display: flex;
+            justify-content: center;
             align-items: center;
             gap: 10px;
             transition: all 0.2s;
-            box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.3);
+            font-family: inherit;
         }
 
         .btn-main:hover {
-            background: var(--primary-hover);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 8px -1px rgba(79, 70, 229, 0.4);
+            background: #333;
+            transform: translateY(-1px);
         }
         
         .btn-main:disabled {
-            background: #D1D5DB;
+            background: #E5E5E5;
             cursor: not-allowed;
+            color: #999;
             transform: none;
-            box-shadow: none;
         }
 
         .btn-main.recording {
             background: var(--danger);
+            color: #5d4037;
             animation: pulse 2s infinite;
+        }
+        
+        .btn-sub {
+            background: var(--bg);
+            color: var(--text-main);
+            border: 1px solid var(--border);
+        }
+        .btn-sub:hover {
+            background: #EFEFEF;
         }
 
         @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
-            70% { box-shadow: 0 0 0 15px rgba(239, 68, 68, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
-        }
-
-        .viz-container {
-            margin-top: 30px;
-        }
-
-        .canvas-wrapper {
-            background: #FAFAFA;
-            border-radius: 12px;
-            padding: 15px;
-            margin-bottom: 20px;
-            border: 1px solid #E5E7EB;
-        }
-
-        .canvas-label {
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: var(--text-sec);
-            margin-bottom: 10px;
-            display: flex;
-            justify-content: space-between;
-        }
-
-        canvas {
-            width: 100%;
-            height: auto;
-            border-radius: 8px;
-            background: white;
-            border: 1px solid #F3F4F6;
-        }
-
-        #transcript {
-            font-size: 1.5rem;
-            text-align: center;
-            padding: 20px;
-            border-radius: 12px;
-            background: #F9FAFB;
-            border: 2px dashed #E5E7EB;
-            color: var(--text-sec);
-            min-height: 1.5em;
+            0% { box-shadow: 0 0 0 0 rgba(230, 184, 162, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(230, 184, 162, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(230, 184, 162, 0); }
         }
         
         .status {
             text-align: center;
             color: var(--text-sec);
-            margin-bottom: 20px;
-            font-size: 0.9rem;
-            height: 1.2em;
+            font-size: 0.8rem;
+            font-weight: 300;
         }
+
+        /* Right Column: Visualization */
+        .viz-panel {
+            position: relative;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 480px;
+        }
+
+        .canvas-container {
+            position: relative;
+            width: 100%;
+            height: 400px;
+        }
+        
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 8px;
+        }
+        
+        #spectrogramCanvas {
+            z-index: 10;
+        }
+        
+        #f0Canvas {
+            z-index: 20;
+            pointer-events: none; /* Let clicks pass through if needed */
+        }
+        
+        .viz-controls {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .toggle-btn {
+            background: none;
+            border: none;
+            color: var(--text-sec);
+            cursor: pointer;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            border-radius: 8px;
+            transition: background 0.2s;
+        }
+        
+        .toggle-btn:hover {
+            background: #f5f5f5;
+        }
+        
+        .toggle-btn.active {
+            color: var(--primary);
+            background: rgba(212, 163, 115, 0.1);
+            font-weight: 600;
+        }
+
+        .ref-controls {
+            display: flex;
+            align-items: center;
+            background: #f1f1f1;
+            border-radius: 20px;
+            padding: 4px;
+        }
+        
+        .ref-controls .toggle-btn {
+            padding: 6px 16px;
+            border-radius: 16px;
+            font-size: 0.85rem;
+            color: var(--text-sec);
+            background: transparent;
+            margin: 0;
+            gap: 0;
+        }
+        
+        .ref-controls .toggle-btn:hover {
+            background: rgba(255,255,255,0.5);
+        }
+        
+        .ref-controls .toggle-btn.active {
+            background: white;
+            color: var(--primary);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            font-weight: 600;
+        }
+        
+        .ref-controls span {
+             display: none; 
+        }
+
+        #transcript-overlay {
+            position: absolute;
+            bottom: 0px; 
+            left: 0;
+            width: 100%;
+            height: 30px;
+            pointer-events: none;
+            z-index: 30;
+        }
+        
+        .char-label {
+            position: absolute;
+            bottom: 0;
+            transform: translateX(-50%);
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--text-main);
+            background: rgba(255,255,255,0.7);
+            padding: 2px 5px;
+            border-radius: 4px;
+        }
+
+        /* Modal */
+        .modal {
+            display: none; 
+            position: fixed; 
+            z-index: 100; 
+            left: 0;
+            top: 0;
+            width: 100%; 
+            height: 100%; 
+            background-color: rgba(0,0,0,0.4); 
+            backdrop-filter: blur(2px);
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto; 
+            padding: 30px;
+            border: 1px solid #888;
+            width: 80%; 
+            max-width: 500px;
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close:hover {
+            color: black;
+        }
+        
+        .typeduck-promo {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        .typeduck-logo {
+            font-weight: bold;
+            color: #FCBF49;
+        }
+        
+        /* Guide lines */
+        .syllable-lines {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 15;
+            pointer-events: none;
+        }
+
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>Quackable</h1>
-            <div class="subtitle">Practice your Cantonese Tones 練習廣東話聲調</div>
+            <div class="header-left">
+                <h1>Quackable</h1>
+                <div class="subtitle">Tone Practice 聲調練習</div>
+            </div>
+            <div class="header-right">
+                <button class="about-btn" onclick="openAbout()">About</button>
+            </div>
         </header>
 
-        <div class="word-card">
-            <button class="refresh-btn" onclick="updateRandomWord()" title="New Word">↻</button>
-            <h2 class="target-word" id="targetWord">你好</h2>
-            <div class="jyutping" id="targetJyutping">nei5 hou2</div>
-            <div class="meaning" id="targetMeaning">Hello</div>
-        </div>
-        
-        <div class="instructions">
-            <span class="instruction-step">1. Press Record 按錄音</span> •
-            <span class="instruction-step">2. Read Aloud 朗讀詞語</span> •
-            <span class="instruction-step">3. Check Tones 檢查聲調</span>
-        </div>
-
-        <div class="controls">
-            <button id="recordBtn" class="btn-main" onclick="toggleRecording()">
-                <span>🎙️ Start Record 開始錄音</span>
-            </button>
-            <button id="playBtn" class="btn-main" onclick="playAudio()" disabled style="background-color: var(--accent);">
-                <span>▶️ Playback 重播</span>
-            </button>
-        </div>
-
-        <div class="status" id="status">Ready 準備就緒</div>
-
-        <div class="canvas-label">Recognized Text 辨識文字</div>
-        <div id="transcript">...</div>
-
-        <div class="viz-container">
-            <div class="canvas-wrapper">
-                <div class="canvas-label">
-                    <span>Spectrogram 聲紋圖</span>
-                    <span>0 - 4kHz</span>
+        <div class="content-grid">
+            <!-- Left Panel -->
+            <div class="left-panel">
+                <div class="word-card">
+                    <button class="refresh-btn" onclick="updateRandomWord()" title="Next Word">↻</button>
+                    <h2 class="target-word" id="targetWord">你好</h2>
+                    <div class="jyutping" id="targetJyutping">nei5 hou2</div>
+                    <div class="meaning" id="targetMeaning">Hello</div>
                 </div>
-                <canvas id="spectrogramCanvas" width="800" height="300"></canvas>
+                
+                <div class="controls">
+                    <button id="recordBtn" class="btn-main" onclick="toggleRecording()">
+                        <span>🎙️ Record / 錄音</span>
+                    </button>
+                    <button id="playBtn" class="btn-main btn-sub" onclick="playAudio()" disabled>
+                        <span>▶️ Playback / 重播</span>
+                    </button>
+                    <div class="status" id="status">Ready to start / 準備開始</div>
+                </div>
+
+                <div style="margin-top: 20px; text-align: center; color: var(--text-sec); font-size: 0.9em;">
+                    <p>Powered by <span style="font-weight: bold; color: var(--text-main);">TypeDuck</span></p>
+                    <a href="https://typeduck.hk" target="_blank" style="color: var(--primary); text-decoration: none;">Download TypeDuck Keyboard</a>
+                </div>
             </div>
 
-            <div class="canvas-wrapper">
-                <div class="canvas-label">
-                    <span>Pitch Contour 聲調曲線 (F0)</span>
-                    <span>75 - 350Hz</span>
+            <!-- Right Panel: Visualization -->
+            <div class="viz-panel">
+                <div class="viz-controls">
+                    <button class="toggle-btn active" onclick="toggleSpectrogram()" id="specToggle">
+                        <span>🌊 Spectrogram</span>
+                    </button>
+                    <div class="ref-controls">
+                         <span style="font-size:0.8rem; color:var(--text-sec); margin-right:5px;">Ref:</span>
+                         <button class="toggle-btn" onclick="setRef('M')" id="refM">Male</button>
+                         <button class="toggle-btn" onclick="setRef('F')" id="refF">Female</button>
+                         <button class="toggle-btn active" onclick="setRef(null)" id="refNone">Off</button>
+                    </div>
                 </div>
-                <canvas id="f0Canvas" width="800" height="200"></canvas>
+                
+                <div class="canvas-container">
+                    <!-- Layers -->
+                    <canvas id="spectrogramCanvas"></canvas>
+                    <div id="syllableOverlay" class="syllable-lines"></div>
+                    <canvas id="f0Canvas"></canvas>
+                    <div id="transcript-overlay"></div>
+                </div>
             </div>
         </div>
     </div>
 
+    <!-- About Modal -->
+    <div id="aboutModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeAbout()">&times;</span>
+            <h2>About Quackable</h2>
+            <p>Idea by <strong>Ann To</strong></p>
+            <p>Created by:</p>
+            <p><strong>Chaak-ming Lau</strong> (chaak.net)</p>
+            <p>&</p>
+            <p><strong>Gemini 3 Pro</strong></p>
+            
+            <div class="typeduck-promo">
+                <p>Learn Cantonese typing with <span class="typeduck-logo">TypeDuck</span>!</p>
+                <a href="https://typeduck.hk" target="_blank" style="color: var(--primary);">typeduck.hk</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="words.js"></script>
     <script>
-        const words = [
-            { word: "你好", jp: "nei5 hou2", en: "Hello" },
-            { word: "多謝", jp: "do1 ze6", en: "Thank you (for gift/action)" },
-            { word: "早晨", jp: "zou2 san4", en: "Good morning" },
-            { word: "唔該", jp: "m4 goi1", en: "Please / Thank you (service)" },
-            { word: "香港", jp: "hoeng1 gong2", en: "Hong Kong" },
-            { word: "快樂", jp: "faai3 lok6", en: "Happy" },
-            { word: "學習", jp: "hok6 zaap6", en: "Learn" },
-            { word: "朋友", jp: "pang4 jau5", en: "Friend" },
-            { word: "食飯", jp: "sik6 faan6", en: "Eat meal" },
-            { word: "再見", jp: "zoi3 gin3", en: "Goodbye" },
-            { word: "天氣", jp: "tin1 hei3", en: "Weather" },
-            { word: "喜歡", jp: "hei2 fun1", en: "Like" }
+        // Data & State
+        // Used from words.js
+        const words = typeof practiceWords !== 'undefined' ? practiceWords : [
+            { word: "你好", jp: "nei5 hou2", en: "Hello" } // Fallback
         ];
-
-        function updateRandomWord() {
-            const random = words[Math.floor(Math.random() * words.length)];
-            document.getElementById('targetWord').textContent = random.word;
-            document.getElementById('targetJyutping').textContent = random.jp;
-            document.getElementById('targetMeaning').textContent = random.en;
-        }
-
-        // Initialize random word on load
-        window.onload = updateRandomWord;
 
         let audioContext;
         let mediaRecorder;
         let audioChunks = [];
         let audioBuffer;
         let isRecording = false;
-        let recognition; // ASR instance
-        const MAX_DURATION = 3000; // 3 seconds
+        let recognition;
+        let transcriptResult = "";
+        let showSpectrogram = true;
+        let refGender = null; // 'M' or 'F' or null
+        const MAX_DURATION = 3000;
 
-        // Initialize Speech Recognition
-        if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
-            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-            recognition = new SpeechRecognition();
-            recognition.lang = 'yue'; // Cantonese
-            recognition.continuous = false;
-            recognition.interimResults = false;
-            
-            recognition.onresult = (event) => {
-                const transcript = event.results[0][0].transcript;
-                document.getElementById('transcript').textContent = transcript;
-            };
-
-            recognition.onerror = (event) => {
-                console.error('Speech recognition error', event.error);
-                if(event.error === 'no-speech') return; // Ignore no-speech, we might just be recording noise
-                document.getElementById('transcript').textContent = '(ASR Error: ' + event.error + ')';
-            };
-        } else {
-             document.getElementById('transcript').textContent = 'Web Speech API not supported in this browser.';
+        // UI Functions
+        function updateRandomWord() {
+            const random = words[Math.floor(Math.random() * words.length)];
+            document.getElementById('targetWord').textContent = random.word;
+            document.getElementById('targetJyutping').textContent = random.jp;
+            document.getElementById('targetMeaning').textContent = random.en;
+            transcriptResult = ""; 
+            clearViz();
         }
 
-        async function toggleRecording() {
-            if (!isRecording) {
-                await startRecording();
-            } else {
-                stopRecording();
+        function openAbout() { document.getElementById('aboutModal').style.display = 'block'; }
+        function closeAbout() { document.getElementById('aboutModal').style.display = 'none'; }
+        window.onclick = function(event) {
+            if (event.target == document.getElementById('aboutModal')) closeAbout();
+        }
+
+        function toggleSpectrogram() {
+            showSpectrogram = !showSpectrogram;
+            document.getElementById('spectrogramCanvas').style.opacity = showSpectrogram ? 1 : 0;
+            document.getElementById('specToggle').classList.toggle('active');
+        }
+
+        function setRef(gender) {
+            refGender = gender;
+            ['refM','refF','refNone'].forEach(id => document.getElementById(id).classList.remove('active'));
+            if(gender === 'M') document.getElementById('refM').classList.add('active');
+            else if(gender === 'F') document.getElementById('refF').classList.add('active');
+            else document.getElementById('refNone').classList.add('active');
+            
+            // Redraw F0 if buffer exists
+            if(audioBuffer) drawF0Contour(audioBuffer);
+        }
+
+        // Initialize
+        window.onload = function() {
+            updateRandomWord();
+            setupASR();
+        };
+
+        function setupASR() {
+             if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                recognition = new SpeechRecognition();
+                recognition.lang = 'yue-Hant-HK'; 
+                recognition.continuous = false;
+                recognition.interimResults = false;
+                
+                recognition.onresult = (event) => {
+                    transcriptResult = event.results[0][0].transcript;
+                    // Will render later after audio processing
+                };
             }
+        }
+
+        // Recording & Audio Processing
+        async function toggleRecording() {
+            if (!isRecording) await startRecording();
+            else stopRecording();
         }
 
         async function startRecording() {
             try {
-                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                if (!audioContext) audioContext = new (window.AudioContext || window.webkitAudioContext)();
                 
-                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
                 mediaRecorder = new MediaRecorder(stream);
                 audioChunks = [];
 
-                mediaRecorder.ondataavailable = (event) => {
-                    audioChunks.push(event.data);
-                };
-
+                mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
                 mediaRecorder.onstop = async () => {
-                    const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
-                    await processAudio(audioBlob);
-                    stream.getTracks().forEach(track => track.stop());
+                   const blob = new Blob(audioChunks, { type: 'audio/wav' });
+                   await processAudio(blob);
+                   stream.getTracks().forEach(t => t.stop());
                 };
 
                 mediaRecorder.start();
                 if (recognition) {
-                    try {
-                        recognition.start();
-                        document.getElementById('transcript').textContent = 'Listening...';
-                    } catch (e) {
-                         // Sometimes recognition is already started or other error
-                        console.log("Recognition start error:", e);
-                    }
+                    try { recognition.start(); } catch(e){}
                 }
-
-                isRecording = true;
                 
-                document.getElementById('recordBtn').textContent = 'Recording...';
-                document.getElementById('recordBtn').classList.add('recording');
-                document.getElementById('status').textContent = 'Recording... (3 seconds)';
-                document.getElementById('playBtn').disabled = true;
-
-                // Auto-stop after 3 seconds
-                setTimeout(() => {
-                    if (isRecording) {
-                        stopRecording();
-                    }
-                }, MAX_DURATION);
-
+                isRecording = true;
+                const btn = document.getElementById('recordBtn');
+                btn.classList.add('recording');
+                btn.querySelector('span').textContent = "⏹️ Stop / 停止";
+                document.getElementById('status').textContent = "Recording... / 錄音中";
+                
+                setTimeout(() => { if(isRecording) stopRecording(); }, MAX_DURATION);
+                
             } catch (err) {
-                console.error('Error accessing microphone:', err);
-                document.getElementById('status').textContent = 'Error: Could not access microphone';
+                alert("Microphone access required / 需要麥克風權限");
             }
         }
 
@@ -397,395 +597,497 @@
                 mediaRecorder.stop();
                 if (recognition) recognition.stop();
                 isRecording = false;
-                document.getElementById('recordBtn').textContent = 'Start Recording';
-                document.getElementById('recordBtn').classList.remove('recording');
-                document.getElementById('status').textContent = 'Processing...';
+                
+                const btn = document.getElementById('recordBtn');
+                btn.classList.remove('recording');
+                btn.querySelector('span').textContent = "🎙️ Record / 錄音";
+                document.getElementById('status').textContent = "Processing... / 處理中";
             }
         }
 
-        async function processAudio(audioBlob) {
-            const arrayBuffer = await audioBlob.arrayBuffer();
-            let rawBuffer = await audioContext.decodeAudioData(arrayBuffer);
+        async function processAudio(blob) {
+            const arrayBuffer = await blob.arrayBuffer();
+            const rawBuffer = await audioContext.decodeAudioData(arrayBuffer);
             
-            // Trim silence/noise
+            // Trim silence
             audioBuffer = trimSilence(rawBuffer);
-
-            if (audioBuffer.length === 0) {
-                 document.getElementById('status').textContent = 'No voice detected.';
-                 return;
-            }
-
-            drawSpectrogram(audioBuffer);
-            drawF0Contour(audioBuffer);
             
-            document.getElementById('status').textContent = 'Analysis complete! Click "Play Recording" to hear it.';
-            document.getElementById('playBtn').disabled = false;
+            if (audioBuffer.length > 0) {
+                 // Resize canvases to match CSS display size for sharp text
+                 const container = document.querySelector('.canvas-container');
+                 const displayW = container.clientWidth;
+                 const displayH = container.clientHeight;
+                 
+                 ['spectrogramCanvas', 'f0Canvas'].forEach(id => {
+                     const c = document.getElementById(id);
+                     c.width = displayW; 
+                     c.height = displayH;
+                 });
+
+                 drawSpectrogram(audioBuffer); // Also calculates syllables
+                 drawF0Contour(audioBuffer);
+                 renderTranscript(audioBuffer);
+                 document.getElementById('playBtn').disabled = false;
+                 document.getElementById('status').textContent = "Done / 完成";
+            } else {
+                 document.getElementById('status').textContent = "No voice detected / 未偵測到聲音";
+            }
         }
-        
+
+        // Signal Processing & Viz
         function trimSilence(buffer) {
+            // Simple RMS VAD
             const data = buffer.getChannelData(0);
-            const sampleRate = buffer.sampleRate;
-            
-            // Frame size for energy calculation (e.g. 10ms)
-            const frameSize = Math.floor(sampleRate * 0.01);
-            
-            // Calculate energy profile
+            const frameSize = Math.floor(buffer.sampleRate * 0.01);
+            let maxE = 0;
             const energies = [];
-            let maxEnergy = 0;
             
-            for (let i = 0; i < data.length; i += frameSize) {
-                let sumSq = 0;
-                const end = Math.min(i + frameSize, data.length);
-                for (let j = i; j < end; j++) {
-                    sumSq += data[j] * data[j];
-                }
-                const rms = Math.sqrt(sumSq / (end - i));
+            for(let i=0; i<data.length; i+=frameSize) {
+                let s = 0;
+                for(let j=0; j<frameSize && i+j<data.length; j++) s+= data[i+j]**2;
+                const rms = Math.sqrt(s/frameSize);
                 energies.push(rms);
-                if (rms > maxEnergy) maxEnergy = rms;
+                if(rms>maxE) maxE = rms;
             }
             
-            // Threshold relative to max energy (e.g., 5% or hard floor)
-            // Using a hard floor is often safer for VAD if signal is weak, 
-            // but relative is better for varied mic gains.
-            // Let's use a combination: max(0.005, maxEnergy * 0.1)
-            const threshold = Math.max(0.005, maxEnergy * 0.1); 
+            const thresh = Math.max(0.005, maxE * 0.1); 
+            let start = 0, end = energies.length - 1;
+            while(start < energies.length && energies[start] < thresh) start++;
+            while(end > start && energies[end] < thresh) end--;
             
-            let startFrame = 0;
-            let endFrame = energies.length - 1;
+            if(start >= end) return {length:0}; // Empty
+
+            const pad = Math.floor(0.15 * buffer.sampleRate); // 150ms padding
+            const startSamp = Math.max(0, start * frameSize - pad);
+            const endSamp = Math.min(data.length, end * frameSize + pad);
             
-            // Find start
-            while (startFrame < energies.length && energies[startFrame] < threshold) {
-                startFrame++;
-            }
-            
-            // Find end
-            while (endFrame > startFrame && energies[endFrame] < threshold) {
-                endFrame--;
-            }
-            
-            // If no voice found
-            if (startFrame >= endFrame) {
-                return buffer; // Return original if we can't determine, or return empty?
-                               // Given requirement "remove parts with only noise", if only noise, maybe return empty.
-                               // But user experience wise, returning original or empty might be confusing.
-                               // Let's return empty to signal "no voice".
-                 // Actually, let's keep it safe. If essentially silence, return it so spectrogram shows nothing.
-            }
-            
-            // Add padding (e.g. 100ms)
-            const paddingFrames = Math.floor(0.1 / 0.01); // 0.1s / frameSize_in_seconds
-            startFrame = Math.max(0, startFrame - paddingFrames);
-            endFrame = Math.min(energies.length - 1, endFrame + paddingFrames);
-            
-            const startTime = startFrame * 0.01;
-            const endTime = (endFrame + 1) * 0.01;
-            
-            const startSample = Math.floor(startTime * sampleRate);
-            const endSample = Math.floor(endTime * sampleRate);
-            const length = endSample - startSample;
-            
-            const newBuffer = audioContext.createBuffer(
-                buffer.numberOfChannels,
-                length,
-                sampleRate
-            );
-            
-            newBuffer.copyToChannel(data.slice(startSample, endSample), 0);
-            return newBuffer;
+            const newBuff = audioContext.createBuffer(1, endSamp - startSamp, buffer.sampleRate);
+            newBuff.copyToChannel(data.slice(startSamp, endSamp), 0);
+            return newBuff;
         }
 
         function drawSpectrogram(buffer) {
             const canvas = document.getElementById('spectrogramCanvas');
             const ctx = canvas.getContext('2d');
-            const width = canvas.width;
-            const height = canvas.height;
-
-            ctx.clearRect(0, 0, width, height);
-
-            const channelData = buffer.getChannelData(0);
-            const sampleRate = buffer.sampleRate;
+            const w = canvas.width, h = canvas.height;
+            ctx.clearRect(0,0,w,h);
             
-            // FFT parameters
-            const fftSize = 1024; // Smaller FFT for better time resolution? Standard is 2048 or 1024.
-            // Praat wideband usually effective 0.005s per frame. 
-            // 2048 at 44.1k is ~46ms (narrowband).
-            // 512 at 44.1k is ~11ms (wideband). 
-            // Let's use 1024 for a balance or 512 for wideband (formant visible).
-            // User asked for "Praat-like". Praat defaults to Wideband for spectrogram view.
+            const data = buffer.getChannelData(0);
+            const fftSize = 2048, hopSize = 256; // Higher resolution
+            const numFrames = Math.floor((data.length - fftSize)/hopSize);
             
-            const effectiveFftSize = 1024; 
-            const hopSize = 256;
-            const numFrames = Math.floor((channelData.length - effectiveFftSize) / hopSize);
+            // Calc Spectrogram
+            const specs = [];
+            let maxM = 0;
+            for(let i=0; i<numFrames; i++) {
+                const frame = data.slice(i*hopSize, i*hopSize+fftSize);
+                const spec = computeFFT(frame);
+                specs.push(spec);
+                for(let v of spec) if(v>maxM) maxM = v;
+            }
             
-            // Create spectrogram data
-            const spectrogram = [];
-            let maxMagnitude = 0;
-
-            for (let i = 0; i < numFrames; i++) {
-                const start = i * hopSize;
-                const frame = channelData.slice(start, start + effectiveFftSize);
-                const spectrum = computeFFT(frame);
-                spectrogram.push(spectrum);
+            // Draw
+            const maxFreq = 5000;
+            const bins = Math.floor(maxFreq / (buffer.sampleRate/2) * (fftSize/2));
+            
+            // Create offscreen buffer for speed
+            const imgData = ctx.createImageData(w, h);
+            
+            for(let x=0; x<w; x++) {
+                const frameIdx = Math.floor(x/w * numFrames);
+                if(frameIdx >= specs.length) break;
+                const spec = specs[frameIdx];
                 
-                // Track max for normalization
-                for (let j=0; j<spectrum.length; j++) {
-                    if(spectrum[j] > maxMagnitude) maxMagnitude = spectrum[j];
+                for(let y=0; y<h; y++) {
+                    const binIdx = Math.floor((h-1-y)/h * bins);
+                    const mag = spec[binIdx];
+                    const dB = 20*Math.log10((mag+1e-6)/(maxM+1e-6));
+                    // Range -50dB to 0dB
+                    const val = Math.max(0, Math.min(255, 255 * (1 - (dB + 50)/50)));
+                    
+                    const pIdx = (y*w + x)*4;
+                    imgData.data[pIdx] = val;   // R
+                    imgData.data[pIdx+1] = val; // G
+                    imgData.data[pIdx+2] = val; // B
+                    imgData.data[pIdx+3] = 255; // Alpha
                 }
             }
+            ctx.putImageData(imgData, 0, 0);
 
-            // Draw spectrogram (Praat: grayscale, dark=high energy)
-            const displayMaxFreq = 5000;
-            const freqBins = Math.floor((displayMaxFreq / (sampleRate/2)) * (effectiveFftSize / 2));
-            const dynamicRange_dB = 50;
-            
-            for (let x = 0; x < Math.min(numFrames, width); x++) {
-                const spectrum = spectrogram[x];
-                for (let y = 0; y < Math.min(freqBins, height); y++) {
-                    const magnitude = spectrum[y];
-                    
-                    // Log scale intensity
-                    const dB = 20 * Math.log10((magnitude + 1e-9) / (maxMagnitude + 1e-9));
-                    let intensityPercent = 0;
-                    if (dB > -dynamicRange_dB) {
-                        intensityPercent = (dB + dynamicRange_dB) / dynamicRange_dB;
-                    }
-                    
-                    const gray = Math.floor(255 * (1 - intensityPercent));
-                    ctx.fillStyle = `rgb(${gray},${gray},${gray})`;
-                    
-                    const yPos = height - (y * height / freqBins);
-                    ctx.fillRect(x * width / numFrames, yPos, Math.ceil(width / numFrames) + 1, 2);
-                }
-            }
-
-            // Add frequency labels
+            // Draw Frequency Grid
             ctx.fillStyle = 'black';
-            ctx.font = '12px Arial';
-            ctx.textBaseline = 'middle';
-            ctx.textAlign = 'left';
-            
-            for (let f = 0; f <= displayMaxFreq; f += 1000) {
-                const y = height - (f / displayMaxFreq) * height;
-                ctx.fillText(`${f/1000}k`, 5, y);
+            ctx.font = '10px sans-serif';
+            ctx.textBaseline = 'top';
+            for(let f=1000; f<maxFreq; f+=1000) {
+                const y = h - (f/maxFreq)*h;
                 ctx.fillStyle = 'rgba(0,0,0,0.1)';
-                ctx.fillRect(30, y, width, 1); // Guide line
-                ctx.fillStyle = 'black';
+                ctx.fillRect(0,y,w,1);
+                ctx.fillStyle = '#999';
+                ctx.fillText(f/1000 + 'k', 5, y);
             }
+            
+            detectSyllables(specs, w);
+        }
+
+        function detectSyllables(specs, width) {
+            // Syllable segmentation: Peak finding + Mid-point split
+            const energyProfile = specs.map(s => {
+                let sum = 0;
+                for(let k=0; k<100 && k<s.length; k++) sum += s[k]; // 0-2kHz roughly
+                return sum;
+            });
+            
+            // Smooth
+            const smoothed = [];
+            const win = 15;
+            for(let i=0; i<energyProfile.length; i++) {
+                let s=0, c=0;
+                for(let j=-win; j<=win; j++) {
+                    if(i+j>=0 && i+j<energyProfile.length) { s+=energyProfile[i+j]; c++; }
+                }
+                smoothed.push(s/c);
+            }
+            
+            const overlay = document.getElementById('syllableOverlay');
+            overlay.innerHTML = '';
+            
+            const maxE = Math.max(...smoothed);
+            const silenceThresh = maxE * 0.15;
+            
+            // 1. Identify "Active Regions" (above threshold) = Syllable cores
+            let active = false;
+            let currentRegion = {start:0, end:0, maxIdx:0, maxVal:0};
+            const regions = [];
+            
+            for(let i=0; i<smoothed.length; i++) {
+                if(smoothed[i] > silenceThresh) {
+                    if(!active) {
+                        active = true;
+                        currentRegion = {start:i, end:i, maxIdx:i, maxVal:smoothed[i]};
+                    } else {
+                        if(smoothed[i] > currentRegion.maxVal) {
+                             currentRegion.maxVal = smoothed[i];
+                             currentRegion.maxIdx = i;
+                        }
+                        currentRegion.end = i;
+                    }
+                } else {
+                    if(active) {
+                        active = false;
+                        if(currentRegion.end - currentRegion.start > 10) { // Min width check
+                             regions.push(currentRegion);
+                        }
+                    }
+                }
+            }
+            if(active && currentRegion.end - currentRegion.start > 10) regions.push(currentRegion);
+            
+            // 2. Find boundaries BETWEEN distinct active regions (Syllables)
+            // The boundary should be the minimum energy point between Region A and Region B
+            const splitPoints = [];
+            
+            for(let k=0; k<regions.length-1; k++) {
+                const r1 = regions[k];
+                const r2 = regions[k+1];
+                
+                // Search for global min between r1.maxIdx and r2.maxIdx
+                // Actually, let's search between r1.end and r2.start first?
+                // The gap might be small. 
+                
+                // Let's look for the deepest valley between the two peaks
+                let searchStart = r1.maxIdx;
+                let searchEnd = r2.maxIdx;
+                let minVal = Infinity;
+                let minIdx = -1;
+                
+                for(let m=searchStart; m<=searchEnd; m++) {
+                    if(smoothed[m] < minVal) {
+                        minVal = smoothed[m];
+                        minIdx = m;
+                    }
+                }
+                
+                splitPoints.push(minIdx);
+            }
+            
+            // 3. Draw lines at split points (skip end/start)
+            // Just draws the dividers
+            splitPoints.forEach(frameIdx => {
+                const pct = (frameIdx / specs.length) * 100;
+                const line = document.createElement('div');
+                line.style.position = 'absolute';
+                line.style.left = pct + '%';
+                line.style.top = '0';
+                line.style.height = '100%';
+                line.style.borderLeft = '1px dashed rgba(0,0,0,0.3)';
+                overlay.appendChild(line);
+            });
+            
+            window.lastBoundaries = splitPoints; // For text placement
         }
 
         function drawF0Contour(buffer) {
             const canvas = document.getElementById('f0Canvas');
             const ctx = canvas.getContext('2d');
-            const width = canvas.width;
-            const height = canvas.height;
-
-            ctx.clearRect(0, 0, width, height);
-
-            const channelData = buffer.getChannelData(0);
-            const sampleRate = buffer.sampleRate;
+            ctx.clearRect(0,0,canvas.width, canvas.height);
             
-            // Extract F0 using autocorrelation
-            const windowSize = 2048;
-            // 1. One point per 10ms (0.01s)
-            const hopSize = Math.floor(sampleRate * 0.010); 
+            const data = buffer.getChannelData(0);
+            const sr = buffer.sampleRate;
+            const hopSize = Math.floor(sr*0.01); // 10ms
+            const numFrames = Math.floor(data.length/hopSize);
             
-            const numFrames = Math.floor((channelData.length - windowSize) / hopSize);
-            const f0Values = [];
-
-            for (let i = 0; i < numFrames; i++) {
-                const start = i * hopSize;
-                const frame = channelData.slice(start, start + windowSize);
-                const f0 = detectPitch(frame, sampleRate);
-                f0Values.push(f0);
-            }
-
-            // Fixed scale: 75-350 Hz
-            const minF0 = 75;
-            const maxF0 = 350;
-
-            // Draw grid
-            ctx.strokeStyle = '#e0e0e0';
-            ctx.lineWidth = 1;
-            ctx.font = '10px Arial';
-            ctx.fillStyle = '#666';
-            ctx.textAlign = 'left'; 
-            ctx.textBaseline = 'middle';
-
-            const step = 50; 
-            for (let f = minF0; f <= maxF0; f += step) {
-                const y = height - ((f - minF0) / (maxF0 - minF0)) * height;
-                ctx.beginPath();
-                ctx.moveTo(35, y);
-                ctx.lineTo(width, y);
-                ctx.stroke();
-                ctx.fillText(`${f} Hz`, 2, y);
-            }
-
-            const jumpThreshold = 40; // Hz difference to consider "very different"
+            const minF0 = 20, maxF0 = 320;
+            const h = canvas.height, w = canvas.width;
             
-            // Draw points (pink/magenta like Praat)
-            ctx.fillStyle = '#E91E63'; 
-            
-            // First pass: Draw dots
-            for (let i = 0; i < f0Values.length; i++) {
-                const f0 = f0Values[i];
-                if (f0 >= minF0 && f0 <= maxF0) {
-                    const x = (i / f0Values.length) * width;
-                    const y = height - ((f0 - minF0) / (maxF0 - minF0)) * height;
-                    ctx.beginPath();
-                    ctx.arc(x, y, 2, 0, 2 * Math.PI);
-                    ctx.fill();
-                }
-            }
-
-            // Second pass: Draw connecting lines
-            ctx.strokeStyle = '#2196F3';
-            ctx.lineWidth = 2;
-            ctx.beginPath();
-
-            let started = false;
-            let lastValidF0 = -1;
-            
-            for (let i = 0; i < f0Values.length; i++) {
-                const f0 = f0Values[i];
+            // Draw Reference Lines
+            if(refGender) {
+                const refHigh = refGender === 'M' ? 180 : 250; // T1
+                const refLow = refGender === 'M' ? 50 : 80;    // T4
                 
-                if (f0 >= minF0 && f0 <= maxF0) {
-                    const x = (i / f0Values.length) * width;
-                    const y = height - ((f0 - minF0) / (maxF0 - minF0)) * height;
-                    
-                    if (!started) {
-                        ctx.moveTo(x, y);
-                        started = true;
-                    } else {
-                        // Check if very different from surrounding (previous point)
-                        const diff = Math.abs(f0 - lastValidF0);
-                        if (diff > jumpThreshold) {
-                            ctx.moveTo(x, y); // Don't connect
-                        } else {
-                            ctx.lineTo(x, y);
-                        }
-                    }
-                    lastValidF0 = f0;
+                ctx.save();
+                ctx.setLineDash([5, 5]);
+                ctx.lineWidth = 1;
+                ctx.font = '10px sans-serif';
+                ctx.textAlign = 'left';
+                
+                // Low Line
+                const yLow = h - (refLow-minF0)/(maxF0-minF0)*h;
+                if(yLow >= 0 && yLow <= h) {
+                    ctx.strokeStyle = '#81C784'; // Greenish
+                    ctx.beginPath(); ctx.moveTo(0, yLow); ctx.lineTo(w, yLow); ctx.stroke();
+                    ctx.fillStyle = '#81C784'; ctx.fillText("T4", 5, yLow-2);
+                }
+                
+                // High Line
+                const yHigh = h - (refHigh-minF0)/(maxF0-minF0)*h;
+                if(yHigh >= 0 && yHigh <= h) {
+                    ctx.strokeStyle = '#FFB74D'; // Orangeish
+                    ctx.beginPath(); ctx.moveTo(0, yHigh); ctx.lineTo(w, yHigh); ctx.stroke();
+                    ctx.fillStyle = '#FFB74D'; ctx.fillText("T1", 5, yHigh-2);
+                }
+                ctx.restore();
+            }
+
+            // Draw Right Axis (Pitch)
+            ctx.save();
+            ctx.fillStyle = '#2196F3'; 
+            ctx.strokeStyle = 'rgba(33, 150, 243, 0.5)'; 
+            ctx.font = '12px sans-serif'; 
+            ctx.textAlign = 'right';
+            ctx.textBaseline = 'middle';
+            
+            const axisX = w - 40; 
+            ctx.beginPath();
+            ctx.moveTo(axisX, 0); 
+            ctx.lineTo(axisX, h); 
+            ctx.stroke();
+            
+            // Draw ticks every 50Hz starting from 50
+            for(let f=50; f<=300; f+=50) {
+                 const y = h - (f-minF0)/(maxF0-minF0)*h;
+                 ctx.fillText(f, w-5, y);
+                 ctx.beginPath(); 
+                 ctx.moveTo(axisX, y); 
+                 ctx.lineTo(axisX+5, y); 
+                 ctx.stroke();
+            }
+            ctx.restore();
+
+            // Calculate Points
+            const points = [];
+            for(let i=0; i<numFrames; i++) {
+                const frame = data.slice(i*hopSize, i*hopSize+2048);
+                if(frame.length < 100) break;
+                
+                // VAD check
+                let e = 0; 
+                for(let s of frame) e+=s*s;
+                e = Math.sqrt(e/frame.length);
+                if(e < 0.01) { points.push(null); continue; }
+
+                const f0 = detectPitch(frame, sr);
+                if(f0 > minF0 && f0 < maxF0) {
+                    points.push({f0, i});
                 } else {
-                    started = false;
-                    lastValidF0 = -1;
+                    points.push(null);
                 }
             }
+            
+            // 1. Draw Line (Smoothed)
+            ctx.strokeStyle = '#2196F3'; 
+            ctx.lineWidth = 3; 
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+            ctx.beginPath();
+            
+            let lastY = -1;
+            let lastF0 = -1;
+            let hasStart = false;
+
+            points.forEach((p, idx) => {
+                const x = (idx/numFrames)*w;
+                if(p) {
+                    const y = h - (p.f0-minF0)/(maxF0-minF0)*h;
+                    
+                    // Continuity Check:
+                    // If we have a previous point, check if the change is "rapid"
+                    // Threshold: 30Hz difference between 10ms frames?
+                    const isContinuous = hasStart && Math.abs(p.f0 - lastF0) < 40;
+
+                    if(isContinuous) {
+                        ctx.lineTo(x,y);
+                    } else {
+                        ctx.moveTo(x,y);
+                        hasStart = true;
+                    }
+                    lastY = y;
+                    lastF0 = p.f0;
+                } else {
+                    hasStart = false;
+                }
+            });
             ctx.stroke();
 
-            // Labels
-            ctx.fillStyle = 'black';
-            ctx.font = '12px Arial';
-            ctx.textAlign = 'right';
-            ctx.fillText('Time →', width - 10, height - 5);
-        }
-
-        function computeFFT(signal) {
-            // Simple magnitude spectrum calculation
-            const fftSize = signal.length;
-            const spectrum = new Array(fftSize / 2).fill(0);
-            
-            // Apply Hamming window
-            const windowed = signal.map((sample, i) => {
-                const window = 0.54 - 0.46 * Math.cos(2 * Math.PI * i / (fftSize - 1));
-                return sample * window;
+            // 2. Draw Dots
+            ctx.fillStyle = '#C2185B'; // Deep Pink/Red
+            points.forEach((p, idx) => {
+                if(p) {
+                    const x = (idx/numFrames)*w;
+                    const y = h - (p.f0-minF0)/(maxF0-minF0)*h;
+                    
+                    // Show dots only if safe (not chaotic jump)
+                    // Or strict 10ms sampling visualization
+                    ctx.beginPath();
+                    ctx.arc(x, y, 1.5, 0, 2*Math.PI); // Radius 1.5
+                    ctx.fill();
+                }
             });
-
-            // Compute power spectrum (simplified)
-            for (let k = 0; k < fftSize / 2; k++) {
-                let real = 0;
-                let imag = 0;
-                for (let n = 0; n < fftSize; n++) {
-                    const angle = -2 * Math.PI * k * n / fftSize;
-                    real += windowed[n] * Math.cos(angle);
-                    imag += windowed[n] * Math.sin(angle);
-                }
-                spectrum[k] = Math.sqrt(real * real + imag * imag);
-            }
-            
-            return spectrum;
         }
 
-        function detectPitch(signal, sampleRate) {
-            // Normalized Autocorrelation (NAC) for pitch detection
-            const minFreq = 70;
-            const maxFreq = 400;
-            const minPeriod = Math.floor(sampleRate / maxFreq);
-            const maxPeriod = Math.floor(sampleRate / minFreq);
+        function renderTranscript(buffer) {
+            const overlay = document.getElementById('transcript-overlay');
+            overlay.innerHTML = '';
             
-            // RMS check for silence
-            let sumSq = 0;
-            for(let k=0; k<signal.length; k++) sumSq += signal[k]*signal[k];
-            const rms = Math.sqrt(sumSq / signal.length);
-            if (rms < 0.01) return 0;
-
-            let maxCorrelation = -1;
-            let bestPeriod = 0;
+            const targetWord = document.getElementById('targetWord').textContent;
             
-            // Standard Autocorrelation
-            // R(k) = sum(x[i] * x[i+k])
-            // Normalized R(k) = R(k) / sqrt(sum(x[i]^2) * sum(x[i+k]^2))
+            // Only show if ASR matched perfectly to avoid alignment mess with wrong text
+            // Or if transcript is non-empty, try to distribute char by char.
+            // Requirement 4: "display individual characters ... if ASR detects exact same thing"
             
-            // To be efficient, we compute terms carefully
-            // Using a slightly smaller window to keep signal bounds
-            const N = signal.length;
+            // Clean transcript (remove dots)
+            const cleanTrans = transcriptResult.replace(/[.,!?]/g, '');
             
-            for (let period = minPeriod; period < maxPeriod && period < N/2; period++) {
-                let sumXY = 0;
-                let sumXX = 0; 
-                let sumYY = 0;
+            if (cleanTrans === targetWord) {
+                // Distribute characters based on detected syllables/energy blobs
+                // Simplest: Evenly distribute over valid voice regions?
+                // Better: Use the 'boundaries' from detectSyllables.
                 
-                // Compare signal[0...M] with signal[period...period+M]
-                // where M = N - maxPeriod to be safe, or N-period
-                // Let's use N - period as the window size for lag 'period'
-                const limit = N - period;
+                // Let's reuse detectSyllables logic or approximating
+                // For a 2 char word, split buffer in half? 
                 
-                for (let i = 0; i < limit; i++) {
-                    const x = signal[i];
-                    const y = signal[i + period];
-                    sumXY += x * y;
-                    sumXX += x * x;
-                    sumYY += y * y;
-                }
+                // Let's assume eqi-distant for now as simple fallback since JS DSP segmentation is hard
+                const chars = cleanTrans.split('');
+                const step = 100 / chars.length;
                 
-                if (sumXX * sumYY > 0) {
-                    const correlation = sumXY / Math.sqrt(sumXX * sumYY);
-                    if (correlation > maxCorrelation) {
-                        maxCorrelation = correlation;
-                        bestPeriod = period;
-                    }
-                }
+                chars.forEach((char, i) => {
+                    const span = document.createElement('span');
+                    span.className = 'char-label';
+                    span.textContent = char;
+                    span.style.left = (step * i + step/2) + '%';
+                    overlay.appendChild(span);
+                });
+            } else {
+                 // Show full transcript at bottom status if mismatch
+                 const span = document.createElement('span');
+                 span.className = 'char-label';
+                 span.style.width = '100%';
+                 span.style.left = '50%'; // Centered
+                 span.style.background = 'none';
+                 span.style.fontSize = '14px';
+                 span.style.color = '#d32f2f';
+                 span.textContent = "Heard: " + (transcriptResult || "...");
+                 overlay.appendChild(span);
             }
-
-            // Voicing threshold to avoid fricative noise detected as pitch
-            // 0.45 is a reasonable empirical threshold for checking periodicity
-            if (maxCorrelation < 0.45) {
-                return 0; // Unvoiced
-            }
-
-            return bestPeriod > 0 ? sampleRate / bestPeriod : 0;
         }
 
-        function getColorForIntensity(intensity) {
-            // Helper for grayscale mapping (0-255)
-            // Not used in main drawSpectrogram new logic, but kept for completeness
-            // Maps 0 (low) -> 255 (high) to White -> Black
-            const val = Math.max(0, Math.min(255, 255 - intensity));
-            return `rgb(${val}, ${val}, ${val})`;
+        // --- Helpers ---
+        function computeFFT(sig) {
+            // Very simplified magnitude spectrum
+            // Real impl would skip this for WebAudio AnalyserNode but we need sync access
+            // Hacky DFT for visualization
+            const N = sig.length;
+            const res = new Float32Array(N/2);
+            // Optimization: Only compute every 4th bin or so for Viz? No, modern JS is fast enough for 1024
+            
+            // Precompute window
+            if(!window.hann) {
+                 window.hann = new Float32Array(N);
+                 for(let i=0;i<N;i++) window.hann[i] = 0.5 * (1 - Math.cos(2*Math.PI*i/(N-1)));
+            }
+            
+            const real = new Float32Array(N/2);
+            const imag = new Float32Array(N/2);
+            
+            for(let i=0; i<N; i++) {
+                const s = sig[i] * window.hann[i];
+                for(let k=0; k<N/2; k++) {
+                   const a = -2*Math.PI*k*i/N;
+                   real[k] += s * Math.cos(a);
+                   imag[k] += s * Math.sin(a);
+                }
+            }
+            
+            for(let k=0; k<N/2; k++) res[k] = Math.sqrt(real[k]**2 + imag[k]**2);
+            return res;
+        }
+
+        function detectPitch(sig, sr) {
+             // NAC-like
+             const minDelay = Math.floor(sr/400); // ~400Hz
+             const maxDelay = Math.floor(sr/70);  // ~70Hz
+             
+             let maxR = 0; 
+             let bestT = 0;
+             
+             const N = sig.length;
+             // Search in range
+             for(let T=minDelay; T<maxDelay; T++) {
+                 let num=0, den1=0, den2=0;
+                 // Sum over a window W
+                 const W = Math.min(1024, N-T);
+                 for(let i=0; i<W; i+=2) { // 2x decimation for speed
+                     num += sig[i] * sig[i+T];
+                     den1 += sig[i]**2;
+                     den2 += sig[i+T]**2;
+                 }
+                 if(den1*den2 === 0) continue;
+                 const R = num / Math.sqrt(den1*den2);
+                 if(R > maxR) { maxR = R; bestT = T; }
+             }
+             
+             if(maxR < 0.60) return 0; // Stricter unvoiced threshold for fricatives
+             return sr/bestT;
         }
 
         function playAudio() {
-            if (audioBuffer) {
-                const source = audioContext.createBufferSource();
-                source.buffer = audioBuffer;
-                source.connect(audioContext.destination);
-                source.start();
-                document.getElementById('status').textContent = 'Playing...';
-                source.onended = () => {
-                    document.getElementById('status').textContent = 'Playback complete';
-                };
-            }
+            if(!audioBuffer) return;
+            const src = audioContext.createBufferSource();
+            src.buffer = audioBuffer;
+            src.connect(audioContext.destination);
+            src.start();
         }
+        
+        function clearViz() {
+             const c1 = document.getElementById('spectrogramCanvas');
+             const c2 = document.getElementById('f0Canvas');
+             c1.getContext('2d').clearRect(0,0,c1.width,c1.height);
+             c2.getContext('2d').clearRect(0,0,c2.width,c2.height);
+             document.getElementById('transcript-overlay').innerHTML = "";
+             document.getElementById('syllableOverlay').innerHTML = "";
+             document.getElementById('playBtn').disabled = true;
+             document.getElementById('status').textContent = "Ready";
+        }
+
     </script>
 </body>
 </html>
